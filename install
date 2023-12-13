@@ -14,7 +14,7 @@ if [ $? -gt 0 ] ;then
 else
 	[ $isPL -eq 1 ] && echo "Archiwum pobrane" || echo "Archive downloaded"
 fi
-unzip -o /tmp/listakanalow.zip -C /tmp
+unzip -o /tmp/listakanalow.zip /tmp
 if [ $? -gt 0 ] ;then
 	[ $isPL -eq 1 ] && echo "błąd rozpakowania archiwum, koniec" || echo "error extracting archive, end"
 	exit 1
