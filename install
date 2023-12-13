@@ -2,25 +2,16 @@
 [ `grep -c 'osd.language=pl_PL' </etc/enigma2/settings` -gt 0 ] && isPL=1 || isPL=0
 
 cd /tmp
-[ -e /tmp/listakanalow.zip ] && rm -f /tmp/listakanalow.zip
 [ -e /tmp/listakanalow ] && rm -fr /tmp/listakanalow
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/listakanalow.zip -O /tmp/listakanalow.zip
+wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2 -O /tmp/enigma2
 if [ $? -gt 0 ] ;then
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/listakanalow.zip -O /tmp/listakanalow.zip
+  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2 -O /tmp/enigma2
   if [ $? -gt 0 ] ;then
-    [ $isPL -eq 1 ] && echo "błąd pobierania archiwum, koniec" || echo "error downloading archive, end"
+    [ $isPL -eq 1 ] && echo "błąd pobierania listy, koniec" || echo "error downloading channel list, end"
     exit 1
   fi
 else
-	[ $isPL -eq 1 ] && echo "Archiwum pobrane" || echo "Archive downloaded"
-fi
-tar -xzf /tmp/listakanalow.zip -C /tmp
-if [ $? -gt 0 ] ;then
-	[ $isPL -eq 1 ] && echo "błąd rozpakowania archiwum, koniec" || echo "error extracting archive, end"
-	exit 1
-else
-	[ $isPL -eq 1 ] && echo "Archiwum rozpakowane" || echo "Archive extracted"
-	rm -f /tmp/listakanalow.zip
+	[ $isPL -eq 1 ] && echo "Lista pobrana" || echo "Lista pobrana"
 fi
 
 pyVer=`python -c "import sys;print(sys.version_info.major)"`
@@ -33,7 +24,7 @@ fi
 
 if [ -e /etc/enigma2 ];then
 	rm  -rf /etc/enigma2
-	[ $isPL -eq 1 ] && echo "Skasowano starą wersję listy kanałów" || echo "Removed old version of channel list"
+	[ $isPL -eq 1 ] && echo "Skasowano starą listę kanałów" || echo "Removed old version of channel list"
 fi
 mv -f /tmp/listakanalow/enigma2 /etc/
 if [ $? -gt 0 ] ;then
@@ -43,7 +34,7 @@ else
 	[ $isPL -eq 1 ] && echo "Lista kanałów zainstalowana" || echo "Channel list installed"
 	rm -fr /tmp/listakanalow
 fi
-[ $isPL -eq 1 ] && echo "KONIEC - E2 jest restartowane" || echo "END - e2 is restarting"
+[ $isPL -eq 1 ] && echo "KONIEC - E2 jest restartowana" || echo "END - e2 is restarting"
 init 4
 init 3
 exit 0
