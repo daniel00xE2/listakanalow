@@ -1,56 +1,33 @@
 #!/bin/bash
-[ `grep -c 'osd.language=pl_PL' </etc/enigma2/settings` -gt 0 ] && isPL=1 || isPL=0
 
-mkdir /tmp/listakanalow
-cd /tmp/listakanalow
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/blacklist
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/lamedb
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.tv
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.radio
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/userbouquet.polskie.tv
+opkg install git
+
+cd /tmp
+
+git clone https://github.com/daniel00xE2/listakanalow.git
 if [ $? -gt 0 ] ;then
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/blacklist
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/lamedb
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.tv
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.radio
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/userbouquet.polskie.tv
-  if [ $? -gt 0 ] ;then
-    [ $isPL -eq 1 ] && echo "błąd pobierania listy, koniec" || echo "error downloading channel list, end"
-    exit 1
-  fi
+echo "Błąd pobierania listy, koniec"
+exit 1
 else
-	[ $isPL -eq 1 ] && echo "Lista pobrana" || echo "Lista pobrana"
+echo "Lista pobrana"
 fi
 
-pyVer=`python -c "import sys;print(sys.version_info.major)"`
-
-if [ $pyVer -eq 2 ];then
-	[ $isPL -eq 1 ] && echo "Wykryto system z python2" || echo "Found system using python2"
-else
-	[ $isPL -eq 1 ] && echo "Wykryto system z python3" || echo "Found system using python3"
-fi
-
-if [ -e /etc/enigma2/bouquets.tv ];then
-	rm  -rf /etc/enigma2/bouquets.tv
-	rm  -rf /etc/enigma2/bouquets.radio
-	rm  -rf /etc/enigma2/userbouquet.polskie.tv
-	rm  -rf /etc/enigma2/lamedb
-	rm  -rf /etc/enigma2/blacklist
-	[ $isPL -eq 1 ] && echo "Skasowano starą listę" || echo "Removed old version of channel list"
-fi
 mv -f /tmp/listakanalow/blacklist /etc/enigma2/
 mv -f /tmp/listakanalow/lamedb /etc/enigma2/
 mv -f /tmp/listakanalow/bouquets.tv /etc/enigma2/
 mv -f /tmp/listakanalow/bouquets.radio /etc/enigma2/
 mv -f /tmp/listakanalow/userbouquet.polskie.tv /etc/enigma2/
 if [ $? -gt 0 ] ;then
-	[ $isPL -eq 1 ] && echo "błąd instalacji listy kanałów, koniec" || echo "error installing channel list, end"
-	exit 1
+echo "Błąd instalacji listy, koniec"
+exit 1
 else
-	[ $isPL -eq 1 ] && echo "Lista kanałów zainstalowana" || echo "Channel list installed"
-	rm -fr /tmp/listakanalow
+echo "Lista zainstalowana pomyślnie."
 fi
-[ $isPL -eq 1 ] && echo "KONIEC - E2 jest restartowana" || echo "END - e2 is restarting"
+
+rm -rf /tmp/listakanalow
+
+echo "E2 jest restartowana..."
+
 init 4
 init 3
 exit 0
