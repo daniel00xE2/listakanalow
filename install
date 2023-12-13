@@ -43,5 +43,7 @@ else
 	[ $isPL -eq 1 ] && echo "Lista kanałów zainstalowana" || echo "Channel list installed"
 	rm -fr /tmp/listakanalow
 fi
-[ $isPL -eq 1 ] && echo "KONIEC - przeładuj teraz E2" || echo "END - reload E2"
-sync
+[ $isPL -eq 1 ] && echo "KONIEC - E2 jest restartowane" || echo "END - e2 is restarting"
+init 4
+init 3
+exit 0
