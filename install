@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 [ `grep -c 'osd.language=pl_PL' </etc/enigma2/settings` -gt 0 ] && isPL=1 || isPL=0
 
 cd /tmp
