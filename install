@@ -2,10 +2,18 @@
 [ `grep -c 'osd.language=pl_PL' </etc/enigma2/settings` -gt 0 ] && isPL=1 || isPL=0
 
 cd /tmp
-[ -e /tmp/listakanalow ] && rm -fr /tmp/listakanalow
-wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2 -O /tmp/enigma2
+[ -e /tmp/listakanalow/ ] && rm -fr /tmp/listakanalow/
+wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/blacklist -O /tmp/listakanalow/
+wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/lamedb -O /tmp/listakanalow/
+wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.tv -O /tmp/listakanalow/
+wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.radio -O /tmp/listakanalow/
+wget -q https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/userbouquet.polskie.tv -O /tmp/listakanalow/
 if [ $? -gt 0 ] ;then
-  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2 -O /tmp/enigma2
+  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/blacklist -O /tmp/listakanalow/
+  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/lamedb -O /tmp/listakanalow/
+  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.tv -O /tmp/listakanalow/
+  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/bouquets.radio -O /tmp/listakanalow/
+  wget -q "--no-check-certificate" https://github.com/daniel00xE2/listakanalow/blob/main/enigma2/userbouquet.polskie.tv -O /tmp/listakanalow/
   if [ $? -gt 0 ] ;then
     [ $isPL -eq 1 ] && echo "błąd pobierania listy, koniec" || echo "error downloading channel list, end"
     exit 1
@@ -22,11 +30,19 @@ else
 	[ $isPL -eq 1 ] && echo "Wykryto system z python3" || echo "Found system using python3"
 fi
 
-if [ -e /etc/enigma2 ];then
-	rm  -rf /etc/enigma2
+if [ -e /etc/enigma2/bouquets.tv ];then
+	rm  -rf /etc/enigma2/bouquets.tv
+	rm  -rf /etc/enigma2/bouquets.radio
+	rm  -rf /etc/enigma2/userbouquet.polskie.tv
+	rm  -rf /etc/enigma2/lamedb
+	rm  -rf /etc/enigma2/blacklist
 	[ $isPL -eq 1 ] && echo "Skasowano starą listę kanałów" || echo "Removed old version of channel list"
 fi
-mv -f /tmp/enigma2 /etc/
+mv -f /tmp/listakanalow/blacklist /etc/enigma2/
+mv -f /tmp/listakanalow/lamedb /etc/enigma2/
+mv -f /tmp/listakanalow/bouquets.tv /etc/enigma2/
+mv -f /tmp/listakanalow/bouquets.radio /etc/enigma2/
+mv -f /tmp/listakanalow/userbouquet.polskie.tv /etc/enigma2/
 if [ $? -gt 0 ] ;then
 	[ $isPL -eq 1 ] && echo "błąd instalacji listy kanałów, koniec" || echo "error installing channel list, end"
 	exit 1
