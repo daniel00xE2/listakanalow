@@ -26,7 +26,7 @@ if [ -e /etc/enigma2 ];then
 	rm  -rf /etc/enigma2
 	[ $isPL -eq 1 ] && echo "Skasowano starą listę kanałów" || echo "Removed old version of channel list"
 fi
-mv -f /tmp/listakanalow/enigma2 /etc/
+mv -f /tmp/enigma2 /etc/
 if [ $? -gt 0 ] ;then
 	[ $isPL -eq 1 ] && echo "błąd instalacji listy kanałów, koniec" || echo "error installing channel list, end"
 	exit 1
